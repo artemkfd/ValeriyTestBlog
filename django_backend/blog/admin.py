@@ -1,6 +1,23 @@
 from django.contrib import admin
 from django.db.models import CharField, TextField
+from unfold.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm
+
 from blog.models import Post, Comment, Category
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+from django.contrib.auth.models import User
+
+from unfold.admin import ModelAdmin
+
+
+admin.site.unregister(User)
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
 
 # Есть возможность управления пользователями, статьями, комментариями и категориями через админку
 admin.site.register(Category)
@@ -20,7 +37,7 @@ class PostFieldsListFilter(admin.SimpleListFilter):
             return queryset.only(*[field.name for field in Post._meta.fields if isinstance(field, (CharField, TextField))])
 
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(ModelAdmin):
     list_display = ('title',
                     'text',
                     'category',
@@ -52,7 +69,7 @@ class CommentFieldsListFilter(admin.SimpleListFilter):
             return queryset.only(*[field.name for field in Post._meta.fields if isinstance(field, (CharField, TextField))])
 
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(ModelAdmin):
     list_display = ('text',
                     'post',
                     'author',
