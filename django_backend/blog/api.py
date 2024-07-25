@@ -53,7 +53,7 @@ def get_all_posts(request):
 
 @api.post("posts/", response={201: PostSchema, 404: Error}, auth=JWTAuth())
 def create_post(request, post: PostCreateSchema):
-    print(request.user)
+
     if post.category_id:
         category_exists = Category.objects.filter(id=post.category_id).exists()
         if not category_exists:
@@ -74,8 +74,7 @@ def create_post(request, post: PostCreateSchema):
     "posts/{post_slug}/edit", response={200: PostSchema, 404: Error}, auth=JWTAuth()
 )
 def update_post(request, post_slug, data: PostCreateSchema):
-    print("data ", data)
-    print(request.user)
+
     post = get_object_or_404(Post, slug=post_slug)
     if post.author != get_object_or_404(User, id=request.user.id):
         return 404, {"detail": "Доступ закрыт. Пост другого автора"}
@@ -121,7 +120,6 @@ def get_comments(request):
 
 @api.post("comments/", response={201: CommentSchema}, auth=JWTAuth())
 def create_comment(request, data: CommentCreateSchema):
-    print(request.user)
 
     # проверяем есть ли такой пост, если нет выдаем ошибку
     get_object_or_404(Post, id=data.post_id)
@@ -138,8 +136,6 @@ def create_comment(request, data: CommentCreateSchema):
     auth=JWTAuth(),
 )
 def update_comment(request, comment_id, data: CommentCreateSchema):
-    print("data ", data)
-    print(request.user)
 
     comment = get_object_or_404(Comment, id=comment_id)
 
@@ -165,7 +161,6 @@ def update_comment(request, comment_id, data: CommentCreateSchema):
 
 @api.delete("comments/{comment_id}", response={200: Confirm, 404: Error}, auth=JWTAuth())
 def delete_comment(request, comment_id: int):
-    print(request.user)
     comment = get_object_or_404(Comment, id=comment_id)
     if comment.author != get_object_or_404(User, id=request.user.id):
         return 404, {"detail": "Доступ закрыт. Комментарий другого автора"}
