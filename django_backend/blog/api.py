@@ -51,6 +51,12 @@ def get_all_posts(request):
     return Post.objects.all()
 
 
+@api.get("posts/{post_slug}", response=PostSchema, auth=JWTAuth())
+def get_post(request, post_slug):
+    post = get_object_or_404(Post, slug=post_slug)
+    return post
+
+
 @api.post("posts/", response={201: PostSchema, 404: Error}, auth=JWTAuth())
 def create_post(request, post: PostCreateSchema):
 
@@ -116,6 +122,12 @@ def delete_post(request, post_slug: str):
 @api.get("comments/", response=list[CommentSchema], auth=JWTAuth())
 def get_comments(request):
     return Comment.objects.all()
+
+
+@api.get("comments/{comment_id}", response=CommentSchema, auth=JWTAuth())
+def get_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    return comment
 
 
 @api.post("comments/", response={201: CommentSchema}, auth=JWTAuth())
