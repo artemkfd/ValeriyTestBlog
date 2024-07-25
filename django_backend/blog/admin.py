@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.db.models import CharField, TextField
 from blog.models import Post, Comment, Category
 
+# Есть возможность управления пользователями, статьями, комментариями и категориями через админку
 admin.site.register(Category)
+
 
 class PostFieldsListFilter(admin.SimpleListFilter):
     title = 'Post Fields'
@@ -32,6 +34,7 @@ class PostAdmin(admin.ModelAdmin):
                      'updated_at']
     list_filter = [PostFieldsListFilter]
 
+
 admin.site.register(Post, PostAdmin)
 
 
@@ -60,5 +63,6 @@ class CommentAdmin(admin.ModelAdmin):
                      'created_at',
                      'updated_at']
     list_filter = [CommentFieldsListFilter]
+
 
 admin.site.register(Comment, CommentAdmin)

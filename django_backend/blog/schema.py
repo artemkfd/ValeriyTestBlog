@@ -1,6 +1,5 @@
 from ninja import ModelSchema, Schema
-
-from blog.models import Post
+from blog.models import Post, Comment
 
 
 class UserIn(Schema):
@@ -22,6 +21,17 @@ class PostCreateSchema(Schema):
     title: str
     text: str
     category_id: int
+
+
+class CommentSchema(ModelSchema):
+    class Meta:
+        model = Comment
+        fields = ('id', 'text', 'post', 'author', 'created_at', 'updated_at')
+
+
+class CommentCreateSchema(Schema):
+    text: str
+    post_id: int
 
 
 class Confirm(Schema):
