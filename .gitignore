@@ -1,7 +1,7 @@
 # Local env files
 .env
 .env.*
-valery_blog_env/
+/valery_blog_env/
 
 # Logs
 logs
